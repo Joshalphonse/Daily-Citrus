@@ -103,7 +103,7 @@ function Comp(props) {
       const ball = Bodies.circle(
         e.clientX,
         e.clientY,
-        10,
+        15,
 
         {
           render: {
@@ -112,8 +112,8 @@ function Comp(props) {
               texture: "https://art.pixilart.com/a50e87ef6026830.png",
 
               //fixed sizes
-              xScale: 0.03,
-              yScale: 0.03,
+              xScale: 0.04,
+              yScale: 0.04,
 
               //random size for fun and added
               //   xScale: (Math.random() * (0.03 - 0.02) + 0.02).toFixed(4),
