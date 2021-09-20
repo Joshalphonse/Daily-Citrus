@@ -1,7 +1,13 @@
+/**Functional componnet for the matter.js Canvas. 
+ The demo shows you how to work with a 2d Physics engine so you can create interactive experiences. 
+ This is great for games and other ways to make your side unique
+
+ Change some of the parameters 
+
+ Add a new polygon Using Composites!. Just add a body in the shape you'd like.
+**/
 import { useEffect, useRef } from "react";
-import { Engine, Render, Bodies, World, Runner } from "matter-js";
-import ReactAudioPlayer from "react-audio-player";
-import Sound from "react-sound";
+import { Engine, Render, Bodies, Runner, Body, Composite } from "matter-js";
 
 function Comp(props) {
   const scene = useRef();
@@ -19,29 +25,62 @@ function Comp(props) {
         width: cw,
         height: 2000,
         wireframes: false,
-        background: "#5D3FD3",
-      },
-    });
+        hasBounds: true,
 
-    World.add(engine.current.world, [
-      Bodies.rectangle(cw, -100, cw, 20, { isStatic: true }),
-      Bodies.circle(700, 50, 17, {
+        background: "#" + Math.floor(Math.random() * 16777215).toString(16),
+      },
+    }); // Create your 2d Canvas "World" This world is yours and here are your set of rules that don't change!
+
+    Composite.add(engine.current.world, [
+      //What exists in our world? Our shapes of course! Add some to the Array. Think of this like an X & Y Graph you used in math class
+      Bodies.rectangle(50, 200, 2000, -20, {
+        isStatic: true, // <-- Keep this shape still
+        restitution: 100,
+        //angle: Math.PI * 0.06,
+      }), //top bar the orange sits on,
+      Bodies.rectangle(1700, 700, 100, -20, {
+        isStatic: true,
+        render: {
+          fillStyle: "#6DDA4A",
+        },
+      }),
+
+      Bodies.rectangle(-100, 500, 500, -200, { isStatic: true }),
+      Bodies.rectangle(400, 750, 900, -200, {
+        isStatic: true,
+        angle: Math.PI * 0.06,
+      }),
+
+      Bodies.rectangle(1000, 1000, 1000, -100, { isStatic: true }), //bottom bound
+
+      Bodies.polygon(800, 130, 4, 85, {
+        isStatic: true,
+        fillStyle: "red",
+        strokeStyle: "blue",
+        lineWidth: 3,
+      }),
+      Bodies.polygon(250, 200, 8, 95, { isStatic: false }),
+      Bodies.rectangle(1000, 400, 100, 500, { isStatic: false }), //change isStatic to true to make the game more difficult 😈
+
+      Bodies.circle(100, -100, 30, {
         render: {
           sprite: {
             texture: "https://art.pixilart.com/a50e87ef6026830.png",
-            xScale: 0.02,
-            yScale: 0.02,
+            xScale: 0.08,
+            yScale: 0.08,
+            friction: 100,
+            restitution: 100,
           },
         },
       }),
     ]);
 
     Runner.run(engine.current);
-    Render.run(render);
+    Render.run(render); //render world
 
     return () => {
       Render.stop(render);
-      World.clear(engine.current.world);
+      Composite.clear(engine.current.world);
       Engine.clear(engine.current);
       render.canvas.remove();
       render.canvas = null;
@@ -58,31 +97,39 @@ function Comp(props) {
     isPressed.current = false;
   };
 
+  // Event handler for our army of little oranges!
   const handleAddCircle = (e) => {
     if (isPressed.current) {
       const ball = Bodies.circle(
         e.clientX,
         e.clientY,
-        35.4,
+        10,
 
         {
           render: {
+            //Render the orange on the canvas
             sprite: {
               texture: "https://art.pixilart.com/a50e87ef6026830.png",
-              xScale: 0.3,
-              yScale: 0.3,
+
+              //fixed sizes
+              xScale: 0.03,
+              yScale: 0.03,
+
+              //random size for fun and added
+              //   xScale: (Math.random() * (0.03 - 0.02) + 0.02).toFixed(4),
+              //   yScale: (Math.random() * (0.03 - 0.02) + 0.02).toFixed(4),
             },
           },
         },
 
-        10 + Math.random() * 10,
+        10 + Math.random() * 5,
         {
-          mass: 10,
+          mass: 0,
           restitution: 100,
           friction: 1,
         }
       );
-      World.add(engine.current.world, [ball]);
+      Composite.add(engine.current.world, [ball]);
     }
   };
 
@@ -92,7 +139,6 @@ function Comp(props) {
       onMouseUp={handleUp}
       onMouseMove={handleAddCircle}
     >
-      <Sound url="././assets/greatest.mp3" playStatus={Sound.status.PLAYING} />
       <div ref={scene} style={{ width: "100%", height: "100%" }} />
     </div>
   );
