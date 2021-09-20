@@ -51,7 +51,7 @@ function Comp(props) {
         angle: Math.PI * 0.06,
       }),
 
-      Bodies.rectangle(1000, 1000, 1000, -100, { isStatic: true }), //bottom bound
+      Bodies.rectangle(1000, 1000, 1200, -100, { isStatic: true }), //bottom bound
 
       Bodies.polygon(800, 130, 4, 85, {
         isStatic: true,
@@ -98,7 +98,7 @@ function Comp(props) {
   };
 
   // Event handler for our army of little oranges!
-  const handleAddCircle = (e) => {
+  const handleAddOrange = (e) => {
     if (isPressed.current) {
       const ball = Bodies.circle(
         e.clientX,
@@ -137,7 +137,7 @@ function Comp(props) {
     <div
       onMouseDown={handleDown}
       onMouseUp={handleUp}
-      onMouseMove={handleAddCircle}
+      onMouseMove={handleAddOrange}
     >
       <div ref={scene} style={{ width: "100%", height: "100%" }} />
     </div>
