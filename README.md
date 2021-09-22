@@ -12,7 +12,7 @@ The game is simple. Get the **Big Orange** to the green platform!
 
 click and drag your mouse across the screen to produce Mini oranges. The mini oranges help you push the big One!
 
-### `Technologies used`
+### `Technologies used!`
 
 React.js & Matter.js
 
